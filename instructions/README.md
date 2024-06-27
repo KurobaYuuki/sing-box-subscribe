@@ -16,7 +16,7 @@ Please refer to: [http://sing-box.sagernet.org/configuration](http://sing-box.sa
 
 Use the website you built to achieve real-time configuration updates, which can serve as the remote link of sing-box
 
-For example, the website I built [https://sing-box-subscribe.vercel.app](https://sing-box-subscribe.vercel.app), add `/config/URL_LINK` after the website, here` URL_LINK` refers to the subscription link
+For example, the website I built [https://sing-box-subscribe.vercel.app](https://sing-box-subscribe.vercel.app), add `/config/URL_LINK` after the website, here`URL_LINK` refers to the subscription link
 
 ```
 https://xxxxxxx.vercel.app/config/https://xxxxxxsubscribe?token=123456&file=https://github.com/Toperlock/sing-box-subscribe/raw/main/config_template/config_template_groups_rule_set_tun.json
@@ -28,7 +28,7 @@ https://xxxxxxx.vercel.app/config/https://xxxxxxsubscribe?token=123456&file=http
 
 The above example shows: enable emoji, add ♥ before the node name, use v2rayng user agent, and use `https://xxxxxxxxx.json` as the generated sing-box configuration template
 
-Example: https://sing-box-subscribe.vercel.app/config/https://gist.githubusercontent.com/Toperlock/b1ca381c32820e8c79669cbbd85b68ac/raw/dafae92fbe48ff36dae6e5172caa1cfd7914cda4/gistfile1.txt&file=https://github.com/Toperlock/sing-box-subscribe/raw/main/config_template/config_template_groups_rule_set_tun.json
+Example: <https://sing-box-subscribe.vercel.app/config/https://gist.githubusercontent.com/Toperlock/b1ca381c32820e8c79669cbbd85b68ac/raw/dafae92fbe48ff36dae6e5172caa1cfd7914cda4/gistfile1.txt&file=https://github.com/Toperlock/sing-box-subscribe/raw/main/config_template/config_template_groups_rule_set_tun.json>
 
 ### 2023.11.04 Update: Two sub links can be processed, the format is: `/config/URL encoding`, `emoji`, `tag`, `prefix`, `UA` parameters cannot be written (supports 3 sub links by 2024.1.1)
 
@@ -38,17 +38,17 @@ Use `|` to connect the two sub links and then [URL encode](https://www.urlencode
   <img src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/5ed8e9de-3296-4dfc-ad65-2e181017829e" alt="how-to-use" width="50%" />
 </div>
 
-Example: https://sing-box-subscribe.vercel.app/config/https%3A%2F%2Fgist.githubusercontent.com%2FToperlock%2Fb1ca381c32820e8c79669cbbd85b68ac%2Fraw%2Fdafae92fbe48ff36dae6e5172caa1cfd7914cda4%2Fgistfile1.txt%7Chttps%3A%2F%2Fgist.githubusercontent.com%2FToperlock%2Ffa2fdc5f827ff7d288c23d568db75412%2Fraw%2F6c3b725da347f57b0021b806dfca5f51e1660746%2F1.yaml
+Example: <https://sing-box-subscribe.vercel.app/config/https%3A%2F%2Fgist.githubusercontent.com%2FToperlock%2Fb1ca381c32820e8c79669cbbd85b68ac%2Fraw%2Fdafae92fbe48ff36dae6e5172caa1cfd7914cda4%2Fgistfile1.txt%7Chttps%3A%2F%2Fgist.githubusercontent.com%2FToperlock%2Ffa2fdc5f827ff7d288c23d568db75412%2Fraw%2F6c3b725da347f57b0021b806dfca5f51e1660746%2F1.yaml>
 
 ### 2023.11.10 Update: The `file` parameter can be simplified and written as a number `1`, `2` represents the use of the template serial number provided in the github repository
 
-Example: https://sing-box-subscribe.vercel.app/config/https://gist.githubusercontent.com/Toperlock/b1ca381c32820e8c79669cbbd85b68ac/raw/dafae92fbe48ff36dae6e5172caa1cfd7914cda4/gistfile1.txt&file=2
+Example: <https://sing-box-subscribe.vercel.app/config/https://gist.githubusercontent.com/Toperlock/b1ca381c32820e8c79669cbbd85b68ac/raw/dafae92fbe48ff36dae6e5172caa1cfd7914cda4/gistfile1.txt&file=2>
 
 ### Demo video
 
-|Web parsing subscription link(v2/clash/sing-box)|
-|-----------------------------|
-|<video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/a583c443-0c7b-454e-aaf2-f0a7159b276a"></video>|
+| Web parsing subscription link(v2/clash/sing-box)                                                                                                |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| <video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/a583c443-0c7b-454e-aaf2-f0a7159b276a"></video> |
 
 ## Catalog
 
@@ -62,23 +62,23 @@ Example: https://sing-box-subscribe.vercel.app/config/https://gist.githubusercon
 
 ## Supported Protocols
 
-|  Protocol | V2 Sub | Clash Sub | Standard URI Format | SingBox Format |
-|  :----  | :----: | :----: | :----: | :----: |
-| http  | ✅ | ✅ | ✅ | ✅ |
-| socks5  | ✅ | ✅ | ✅ | ✅ |
-| shadowsocks  | ✅ | ✅ | ✅ | ✅ |
-| shadowsocksR  | ✅ | ✅ | ✅ | singbox doesn't support this by default |
-| vmess  | ✅ | ✅ | ✅ | ✅ |
-| trojan  | ✅ | ✅ | ✅ | ✅ |
-| vless  | ✅ | ✅ | ✅ | ✅ |
-| tuic  | ✅ | ✅ | ✅ | ✅ |
-| hysteria  | ✅ | ✅ | ✅ | ✅ |
-| hysteria2  | ✅ | ✅ | ✅ | ✅ |
-| wireguard  | ✅ | ✅ | ✅ | ✅ |
+| Protocol     | V2 Sub | Clash Sub | Standard URI Format |             SingBox Format              |
+| :----------- | :----: | :-------: | :-----------------: | :-------------------------------------: |
+| http         |   ✅   |    ✅     |         ✅          |                   ✅                    |
+| socks5       |   ✅   |    ✅     |         ✅          |                   ✅                    |
+| shadowsocks  |   ✅   |    ✅     |         ✅          |                   ✅                    |
+| shadowsocksR |   ✅   |    ✅     |         ✅          | singbox doesn't support this by default |
+| vmess        |   ✅   |    ✅     |         ✅          |                   ✅                    |
+| trojan       |   ✅   |    ✅     |         ✅          |                   ✅                    |
+| vless        |   ✅   |    ✅     |         ✅          |                   ✅                    |
+| tuic         |   ✅   |    ✅     |         ✅          |                   ✅                    |
+| hysteria     |   ✅   |    ✅     |         ✅          |                   ✅                    |
+| hysteria2    |   ✅   |    ✅     |         ✅          |                   ✅                    |
+| wireguard    |   ✅   |    ✅     |         ✅          |                   ✅                    |
 
 ~Parsing of clash subscriptions is not supported~ Only parsing of the checked protocol sharing links in( **v2 or clash subscription format**) has been implemented for now. You can write your own protocol parsers, for example, `vless.py` (the filename must match the protocol name), and place it in the `parsers` directory. The `vless.py` file must include a `parse` function.
 
-**This script is for personal use. I use [yacd](https://yacd.metacubex.one) (For ios please use http://yacd.metacubex.one) to manage node switching (outbound types `urltest` and `selector`) and distribute traffic like in clash, which is very convenient. If you have similar needs, you can try it. If you have any new functional requirements or any errors when using the script, please submit an issue and do not harass sing-box.**.
+**This script is for personal use. I use [yacd](https://yacd.metacubex.one) (For ios please use <http://yacd.metacubex.one>) to manage node switching (outbound types `urltest` and `selector`) and distribute traffic like in clash, which is very convenient. If you have similar needs, you can try it. If you have any new functional requirements or any errors when using the script, please submit an issue and do not harass sing-box.**.
 
 **Scripts can be deployed to run on a web page using a vercel server, or you can download the project source code and run it locally. Please use your own deployed website to generate the sing-box configuration.**
 
@@ -124,26 +124,27 @@ Android use chrome browser to open the webpage to generate the configuration fil
 
 ## 🎬 Demonstration video
 
-|Web parsing sub link|Web parsing URI links|
-|-----------------------------|-----------------------------|
-|<video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/9f8f1a70-58b1-4117-a650-f956d9249e43"></video>|<video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/63e180ad-eead-433f-8ee8-73055dafbd56"></video>|
+| Web parsing sub link                                                                                                                            | Web parsing URI links                                                                                                                           |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| <video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/9f8f1a70-58b1-4117-a650-f956d9249e43"></video> | <video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/63e180ad-eead-433f-8ee8-73055dafbd56"></video> |
 
-|Android Chrome page shrink|Web directly parse base64|
-|-----------------------------|-----------------------------|
-|<video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/cb149206-307f-4de8-9968-9832dcf8268a"></video>|<video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/0081f055-2cd4-46bb-a4a9-7aac7d5f93a5"></video>|
+| Android Chrome page shrink                                                                                                                      | Web directly parse base64                                                                                                                       |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| <video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/cb149206-307f-4de8-9968-9832dcf8268a"></video> | <video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/0081f055-2cd4-46bb-a4a9-7aac7d5f93a5"></video> |
 
-|Local parsing sub link|Local parsing URI links|
-|-----------------------------|-----------------------------|
-|<video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/12da95a3-aae9-4ae4-ab88-774ed54f3217"></video>|<video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/7e93568d-ece6-4cba-8dd0-bc5b5e64ade7"></video>|
+| Local parsing sub link                                                                                                                          | Local parsing URI links                                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| <video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/12da95a3-aae9-4ae4-ab88-774ed54f3217"></video> | <video controls width="250" src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/7e93568d-ece6-4cba-8dd0-bc5b5e64ade7"></video> |
 
 # II. Local installation
-### Install [Python](https://www.python.org/) version 3.10 or above on your PC. Make sure to add Python to your system environment variables (follow Google's installation steps).
+
+### Install [Python](https://www.python.org/) version 3.10 or above on your PC. Make sure to add Python to your system environment variables (follow Google's installation steps)
 
 <div align="left">
   <img src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/f387322b-a602-40df-b3b6-95561329f2f8" alt="install" width="60%" />
 </div>
 
-### In the terminal, input the following command to install dependencies (on Mac, replace `pip` with `pip3`):
+### In the terminal, input the following command to install dependencies (on Mac, replace `pip` with `pip3`)
 
 ```
 pip install -r requirements.txt
@@ -153,19 +154,19 @@ pip install -r requirements.txt
   <img src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/0fc03b49-4c57-4ef3-a4fc-044c1a108d75" alt="install" width="60%" />
 </div>
 
-### Download the `sing-box-subscribe` project and open the terminal to navigate to the project directory (you can directly type `cmd` in the file path).
+### Download the `sing-box-subscribe` project and open the terminal to navigate to the project directory (you can directly type `cmd` in the file path)
 
 <div align="left">
   <img src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/73f05ba8-105c-4f10-8e6c-16e27f26c084" alt="run" width="60%" />
 </div>
 
-### Put your subscription links in `providers.json`, edit `config_template_groups_tun.json` file and use the following command to run the script after editing the template:
+### Put your subscription links in `providers.json`, edit `config_template_groups_tun.json` file and use the following command to run the script after editing the template
 
 ```
 python main.py
 ```
 
-or you can directly select the template with the  `template_index`, `0` means the first template
+or you can directly select the template with the `template_index`, `0` means the first template
 
 ```
 python main.py --template_index=0
@@ -176,64 +177,67 @@ For Windows systems, it's recommended to add the commands to a batch program for
 Before using, make sure to edit the `providers.json` file and the `.json` template files in the `config_template` directory.
 
 A lazy configuration `config_template_groups_rule_set_tun` file is included, which allows filtering nodes based on different categories:
-* Implement `Openai` routing rules
-* Implement `Youtube` routing rules
-* Implement `Google` routing rules
-* Implement `Github` routing rules
-* Implement `Telegram` routing rules
-* Implement `Twitter` routing rules
-* Implement `Facebook` routing rules
-* Implement `Instagram` routing rules
-* Implement `Bilibili` routing rules
-* Implement `Bahamut` routing rules
-* Implement `Spotify` routing rules
-* Implement `TikTok` routing rules
-* Implement `Netflix` routing rules
-* Implement `Disney+` routing rules
-* Implement `Apple` routing rules
-* Implement `Amazon` routing rules
-* Implement `Microsoft` routing rules
-* Implement `Game` routing rules
-* Implement `Hbo` routing rules
-* Implement `Prime Video` routing rules
 
+- Implement `Openai` routing rules
+- Implement `Youtube` routing rules
+- Implement `Google` routing rules
+- Implement `Github` routing rules
+- Implement `Telegram` routing rules
+- Implement `Twitter` routing rules
+- Implement `Facebook` routing rules
+- Implement `Instagram` routing rules
+- Implement `Bilibili` routing rules
+- Implement `Bahamut` routing rules
+- Implement `Spotify` routing rules
+- Implement `TikTok` routing rules
+- Implement `Netflix` routing rules
+- Implement `Disney+` routing rules
+- Implement `Apple` routing rules
+- Implement `Amazon` routing rules
+- Implement `Microsoft` routing rules
+- Implement `Game` routing rules
+- Implement `Hbo` routing rules
+- Implement `Prime Video` routing rules
 
 # providers.json File
+
 In this file, you can add subscription links and basic settings.
+
 ```json
 {
-    "subscribes":[
-        {
-            "url": "https://4gviet.com/api/v1/client/subscribe?token=xx",
-            "tag": "airport1_tag", //You can keep the default without modification
-            "enabled": true, //Enable conversion of this link
-            "emoji": 1, //Add flag emoji
-            "subgroup": "",
-            "prefix": "", //Do not add node name prefix
-            "ex-node-name": "网站|流量|过期", //Filter nodes containing keywords
-            "User-Agent":"clashmeta" //Set browser UA
-        },
-        {
-            "url": "https://5gtocdocao.com/api/v1/client/subscribe?token=xx",
-            "tag": "airport2_tag", //You can keep the default without modification
-            "enabled": false, //Disable conversion of this link
-            "emoji": 0, //Do not add flag emoji
-            "subgroup": "named", //Name the subscription link
-            "prefix": "❤️node_name prefix - ", //Add node name prefix
-            "User-Agent":"clashmeta" //Set browser UA
-        }
-    ],
-    "auto_set_outbounds_dns":{
-        "proxy": "",
-        "direct": ""
+  "subscribes": [
+    {
+      "url": "https://4gviet.com/api/v1/client/subscribe?token=xx",
+      "tag": "airport1_tag", //You can keep the default without modification
+      "enabled": true, //Enable conversion of this link
+      "emoji": 1, //Add flag emoji
+      "subgroup": "",
+      "prefix": "", //Do not add node name prefix
+      "ex-node-name": "网站|流量|过期", //Filter nodes containing keywords
+      "User-Agent": "clashmeta" //Set browser UA
     },
-    "save_config_path": "./config.json",
-    "auto_backup": false,
-    "exclude_protocol": "ssr", //Not parsing ssr nodes!!!
-    "config_template": "", //Customize the correct web page json configuration template link
-    "Only-nodes": false //Output the complete sing-box configuration
+    {
+      "url": "https://5gtocdocao.com/api/v1/client/subscribe?token=xx",
+      "tag": "airport2_tag", //You can keep the default without modification
+      "enabled": false, //Disable conversion of this link
+      "emoji": 0, //Do not add flag emoji
+      "subgroup": "named", //Name the subscription link
+      "prefix": "❤️node_name prefix - ", //Add node name prefix
+      "User-Agent": "clashmeta" //Set browser UA
+    }
+  ],
+  "auto_set_outbounds_dns": {
+    "proxy": "",
+    "direct": ""
+  },
+  "save_config_path": "./config.json",
+  "auto_backup": false,
+  "exclude_protocol": "ssr", //Not parsing ssr nodes!!!
+  "config_template": "", //Customize the correct web page json configuration template link
+  "Only-nodes": false //Output the complete sing-box configuration
 }
 ```
+
 - `url`: Required.
 
 > Supports setting up a regular V2 subscription link (**content in base64 encoding**)
@@ -252,7 +256,7 @@ In this file, you can add subscription links and basic settings.
 
 - `tag`: Required. Just keep the default.
 
-> Fill in this tag in the config template to add this subscription. The "airport1_tag" here corresponds to "{机场1}" in the config template. Specific usage can be found in the config template section below.
+> Fill in this tag in the config template to add this subscription. The "airport1_tag" here corresponds to "{机场 1}" in the config template. Specific usage can be found in the config template section below.
 
 <details>
       <summary>tag screenshot reference</summary>
@@ -283,7 +287,7 @@ In this file, you can add subscription links and basic settings.
 </details>
 
 - `auto_set_outbounds_dns`: Optional.
-> Includes `proxy` and `direct` settings.
+  > Includes `proxy` and `direct` settings.
 
 > `proxy` and `direct` should be set to the `tag` of the `dns server` in the config template file.
 
@@ -296,10 +300,11 @@ In this file, you can add subscription links and basic settings.
 - `save_config_path`: Required. Set the path for the generated configuration file.
 
 - `auto_backup`: Optional.
-> When set to true, the script will rename the currently used sing-box configuration file to `original_filename.current_time.bak` for backup purposes, in case an incorrect configuration file is generated and needs to be restored.
+
+  > When set to true, the script will rename the currently used sing-box configuration file to `original_filename.current_time.bak` for backup purposes, in case an incorrect configuration file is generated and needs to be restored.
 
 - `exclude_protocol`: Optional.
-> Set the protocols to exclude, separated by commas, e.g., ssr, vmess.
+  > Set the protocols to exclude, separated by commas, e.g., ssr, vmess.
 
 > Sharing links using protocols in this setting will be ignored.
 
@@ -308,9 +313,10 @@ In this file, you can add subscription links and basic settings.
 - `config_template`：Optional. Enter a correct webpage json configuration template link to generate sing-box configuration from this template.
 
 - `Only-nodes`: Optional.
-> When it is set to true or 1, only the node information in sing-box format of the subscription link is output.
+  > When it is set to true or 1, only the node information in sing-box format of the subscription link is output.
 
 # config Template Files
+
 The script will search for JSON template files in the `config_template` directory, and you can select which template file to use when the script runs.
 
 For example, if there are `tun.json` and `socks.json` template files in the directory.
@@ -320,6 +326,7 @@ For example, if there are `tun.json` and `socks.json` template files in the dire
 The script does not validate the correctness of the template files. If the template file is incorrect, errors will occur, and the script won't run.
 
 The template files are similar to sing-box configs, but with some new parameters like `{all}`, `{机场tag}` (translated as `{airport_tag}`), `filter`, which only work with `clash_mode` in `urltest` and `selector` outbounds.
+
 ```json
 {
   "tag":"proxy",
@@ -349,17 +356,20 @@ The template files are similar to sing-box configs, but with some new parameters
   ]
 }
 ```
+
 - `{all}`: Represents all nodes in all subscriptions. The script will add all nodes to the `outbounds` with this identifier.
 
 - `{机场tag}` (translated as `{airport_tag}`): The airport `tag` set in `providers.json` can be used here, representing all nodes in this subscription.
 
 - `filter`: Optional. Node filtering, an array object where you can add any number of rules, formatted as:
+
 ```json
 "filter": [
     {"action": "include", "keywords": ["keyword1|keyword2"]},
     {"action": "exclude", "keywords": ["keyword1|keyword2"], "for": ["airport1_tag", "airport2_tag"]}
   ]
 ```
+
 - **Keyword case-sensitive**
 
 - `include`: Add the keywords to be retained, use '|' to connect multiple keywords. Nodes with names containing these keywords will be retained, and other nodes will be deleted.
@@ -383,6 +393,7 @@ Multiple rules will be executed in order.
 > Use WinSW to set sing-box.exe as a Windows service, [WinSW tutorial](https://github.com/winsw/winsw)
 
 > XML configuration file modification
+
 ```xml
 <service>
   <id>sing-box</id>
@@ -393,9 +404,10 @@ Multiple rules will be executed in order.
   <arguments>run</arguments>
 </service>
 ```
+
 <details>
       <summary>Windows sing-box folder contents</summary>
- 
+
 <div align="left">
   <img src="https://github.com/Toperlock/sing-box-subscribe/assets/86833913/c6a815bf-b542-43c6-aeb6-84020586a1f1" alt="download" width="50%" />
 </div>
@@ -439,6 +451,7 @@ The specific effects depend on individual outbound and rule settings.
 </details>
 
 # Thanks
+
 - [xream](https://github.com/xream)
 - [sing-box](https://github.com/SagerNet/sing-box)
 - [yacd](https://github.com/haishanh/yacd)

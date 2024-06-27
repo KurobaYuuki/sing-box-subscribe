@@ -12,16 +12,16 @@
       "external_ui_download_detour": "",
       "default_mode": "rule"
     },
-  "cache_file": {
-    "enabled": true,
-    "store_fakeip": false
+    "cache_file": {
+      "enabled": true,
+      "store_fakeip": false
     }
   },
   "dns": {
     "servers": [
       {
         "tag": "proxyDns",
-        "address": "tls://8.8.8.8",
+        "address": "https://8.8.8.8/dns-query",
         "detour": "proxy"
       },
       {
@@ -36,11 +36,7 @@
     ],
     "rules": [
       {
-        "domain": [
-          "ghproxy.com",
-          "cdn.jsdelivr.net",
-          "testingcf.jsdelivr.net"
-        ],
+        "domain": ["ghproxy.com", "cdn.jsdelivr.net", "testingcf.jsdelivr.net"],
         "server": "localDns"
       },
       {
@@ -51,7 +47,11 @@
         "outbound": "any",
         "server": "localDns",
         "disable_cache": true
-      },  
+      },
+      {
+        "rule_set": "geosite-cn",
+        "server": "localDns"
+      },
       {
         "clash_mode": "direct",
         "server": "localDns"
@@ -61,6 +61,7 @@
         "server": "proxyDns"
       }
     ],
+    "final": "proxyDns",
     "strategy": "ipv4_only"
   },
   "inbounds": [
@@ -91,21 +92,15 @@
   ],
   "outbounds": [
     {
-      "tag":"proxy",
-      "type":"selector",
-      "outbounds":[
-        "auto",
-        "direct",
-        "{all}"
-      ]
+      "tag": "proxy",
+      "type": "selector",
+      "outbounds": ["auto", "direct", "{all}"]
     },
     {
-      "tag":"auto",
-      "type":"urltest",
-      "outbounds":[
-        "{all}"
-      ],
-      "url": "http://www.gstatic.com/generate_204",
+      "tag": "auto",
+      "type": "urltest",
+      "outbounds": ["{all}"],
+      "url": "https://www.gstatic.com/generate_204",
       "interval": "10m",
       "tolerance": 50
     },
@@ -155,6 +150,18 @@
           "d.metacubex.one"
         ],
         "outbound": "direct"
+      },
+      {
+        "rule_set": "geosite-private",
+        "outbound": "direct"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
+        "rule_set": ["geoip-cn", "geosite-cn"],
+        "outbound": "direct"
       }
     ],
     "rule_set": [
@@ -164,6 +171,28 @@
         "format": "binary",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
         "download_detour": "direct"
+      },
+
+      {
+        "tag": "geoip-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
+        "download_detour": "auto"
+      },
+      {
+        "tag": "geosite-private",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/private.srs",
+        "download_detour": "auto"
+      },
+      {
+        "tag": "geosite-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
+        "download_detour": "auto"
       }
     ]
   }
