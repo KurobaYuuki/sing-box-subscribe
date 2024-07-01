@@ -148,8 +148,7 @@
         "Japan",
         "America",
         "Others"
-      ],
-      "default": "Proxy"
+      ]
     },
     {
       "tag": "Telegram",
@@ -190,8 +189,7 @@
         "Japan",
         "America",
         "Others"
-      ],
-      "default": "Proxy"
+      ]
     },
     {
       "tag": "Bilibili",
@@ -316,16 +314,7 @@
     {
       "tag": "Final",
       "type": "selector",
-      "outbounds": [
-        "Proxy",
-        "HongKong",
-        "TaiWan",
-        "Singapore",
-        "Japan",
-        "America",
-        "Others",
-        "direct"
-      ]
+      "outbounds": ["Proxy", "direct"]
     },
     {
       "tag": "China",
@@ -459,12 +448,7 @@
         "outbound": "OpenAI"
       },
       {
-        "rule_set": [
-          "geosite-youtube",
-          "geoip-google",
-          "geosite-google",
-          "geosite-github"
-        ],
+        "rule_set": ["geosite-youtube", "geoip-google", "geosite-google"],
         "outbound": "Google"
       },
       {
@@ -506,6 +490,10 @@
       {
         "rule_set": ["geoip-apple", "geosite-apple"],
         "outbound": "Apple"
+      },
+      {
+        "rule_set": "geosite-github",
+        "outbound": "Proxy"
       },
       {
         "rule_set": "geosite-microsoft",
