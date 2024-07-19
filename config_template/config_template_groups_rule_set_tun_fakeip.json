@@ -96,8 +96,7 @@
     {
       "tag": "tun",
       "type": "tun",
-      "inet4_address": "172.19.0.0/30",
-      "inet6_address": "fdfe:dcba:9876::0/126",
+      "address": ["172.19.0.1/30", "fdfe:dcba:9876::1/126"],
       "stack": "system",
       "auto_route": true,
       "strict_route": true,
@@ -384,7 +383,7 @@
       "filter": [
         { "action": "exclude", "keywords": ["网站|地址|剩余|过期|时间|有效"] }
       ],
-      "url": "https://www.gstatic.com/generate_204",
+      "url": "https://cp.cloudflare.com/",
       "interval": "10m",
       "tolerance": 50
     },
