@@ -8,6 +8,7 @@ import argparse  # 添加 argparse 模块
 import tempfile
 import shutil
 import tempfile  # 导入 tempfile 模块
+import requests
 from datetime import datetime, timedelta
 
 app = Flask(__name__, template_folder='../templates')  # 指定模板文件夹的路径
@@ -255,6 +256,13 @@ def config(url):
             temp_json_data['config_template'] = ''
             selected_template_index = str(int(file_param) - 1)
         temp_json_data = json.dumps(json.dumps(temp_json_data, indent=4, ensure_ascii=False), indent=4, ensure_ascii=False)
+        
+        # 获取 subscription-userinfo
+        response = requests.get(full_url)
+        subscription_userinfo = response.headers.get('subscription-userinfo', 'subscription-userinfo is not found')
+        # 打印 subscription-userinfo
+        print(f"subscription-userinfo: {subscription_userinfo}")
+        
         subprocess.check_call([sys.executable, 'main.py', '--template_index', selected_template_index, '--temp_json_data', temp_json_data])
         CONFIG_FILE_NAME = json.loads(os.environ['TEMP_JSON_DATA']).get("save_config_path", "config.json")
         if CONFIG_FILE_NAME.startswith("./"):
@@ -271,7 +279,9 @@ def config(url):
                 flash('配置文件生成成功', 'success')
                 flash('Tạo file cấu hình thành công', 'Thành công^^')
         config_data = json.loads(config_content)
-        return Response(config_content, content_type='text/plain; charset=utf-8')
+        response = Response(config_content, content_type='text/plain; charset=utf-8')
+        response.headers['subscription-userinfo'] = subscription_userinfo
+        return response
     except subprocess.CalledProcessError as e:
         os.environ['TEMP_JSON_DATA'] = json.dumps(json.loads(data_json['TEMP_JSON_DATA']), indent=4, ensure_ascii=False)
         return Response(json.dumps({'status': 'error'}, indent=4,ensure_ascii=False), content_type='application/json; charset=utf-8', status=500)
