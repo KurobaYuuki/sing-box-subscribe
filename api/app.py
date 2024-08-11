@@ -16,9 +16,24 @@ templates = Jinja2Templates(directory="templates")  # 模板文件在 'templates
 
 app.secret_key = os.urandom(24)  # 生成一个随机的密钥
 data_json = {}
+# 使用更具描述性的变量名
+DEFAULT_SUBSCRIBES = [
+    {"url":"URL","tag":"tag_1","enabled":True,"emoji":1,"subgroup":"","prefix":"","ex-node-name": "","User-Agent":"clashmeta"},
+    {"url":"URL","tag":"tag_2","enabled":False,"emoji":1,"subgroup":"","prefix":"","ex-node-name": "","User-Agent":"clashmeta"},
+    {"url":"URL","tag":"tag_3","enabled":False,"emoji":1,"subgroup":"","prefix":"","ex-node-name": "","User-Agent":"clashmeta"}
+]
+DEFAULT_TEMP_JSON_DATA = {
+    "subscribes": DEFAULT_SUBSCRIBES,
+    "auto_set_outbounds_dns": {"proxy": "", "direct": ""},
+    "save_config_path": "./config.json",
+    "auto_backup": False,
+    "exclude_protocol": "ssr",
+    "config_template": "",
+    "Only-nodes": False
+}
 # 设置环境变量 TEMP_JSON_DATA 的初始值
-os.environ['TEMP_JSON_DATA'] = '{"subscribes":[{"url":"URL","tag":"tag_1","enabled":true,"emoji":1,"subgroup":"","prefix":"","User-Agent":"clashmeta"},{"url":"URL","tag":"tag_2","enabled":false,"emoji":1,"subgroup":"","prefix":"","User-Agent":"clashmeta"}],"auto_set_outbounds_dns":{"proxy":"","direct":""},"save_config_path":"./config.json","auto_backup":false,"exclude_protocol":"ssr","config_template":"","Only-nodes":false}'
-data_json['TEMP_JSON_DATA'] = '{"subscribes":[{"url":"URL","tag":"tag_1","enabled":true,"emoji":1,"subgroup":"","prefix":"","User-Agent":"clashmeta"},{"url":"URL","tag":"tag_2","enabled":false,"emoji":1,"subgroup":"","prefix":"","User-Agent":"clashmeta"}],"auto_set_outbounds_dns":{"proxy":"","direct":""},"save_config_path":"./config.json","auto_backup":false,"exclude_protocol":"ssr","config_template":"","Only-nodes":false}'
+os.environ['TEMP_JSON_DATA'] = json.dumps(DEFAULT_TEMP_JSON_DATA)
+data_json['TEMP_JSON_DATA'] = json.dumps(DEFAULT_TEMP_JSON_DATA)
 
 TEMP_DIR = tempfile.gettempdir()  # 获取临时目录
 
@@ -26,33 +41,38 @@ TEMP_DIR = tempfile.gettempdir()  # 获取临时目录
 def get_temp_json_data():
     temp_json_data = os.environ.get('TEMP_JSON_DATA')
     if temp_json_data:
-        return json.loads(temp_json_data)
-    return {}
+        try:
+            return json.loads(temp_json_data)
+        except json.JSONDecodeError:
+            # 处理无效 JSON 数据
+            return DEFAULT_TEMP_JSON_DATA
+    return DEFAULT_TEMP_JSON_DATA
 
 # 获取配置模板列表
 def get_template_list():
     template_list = []
     config_template_dir = 'config_template'
-    template_files = os.listdir(config_template_dir)
-    template_list = [os.path.splitext(file)[0] for file in template_files if file.endswith('.json')]
-    template_list.sort()
+    if os.path.exists(config_template_dir):
+        template_files = os.listdir(config_template_dir)
+        template_list = [os.path.splitext(file)[0] for file in template_files if file.endswith('.json')]
+        template_list.sort()
     return template_list
 
 # 读取 providers.json 文件
 def read_providers_json():
-    temp_json_data = get_temp_json_data()
-    if temp_json_data:
-        return temp_json_data
-    with open('providers.json', 'r', encoding='utf-8') as json_file:
-        providers_data = json.load(json_file)
-    return providers_data
+    try:
+        with open('providers.json', 'r', encoding='utf-8') as json_file:
+            providers_data = json.load(json_file)
+        return providers_data
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError:
+        return {}
 
 # 写入 providers.json 文件
 def write_providers_json(data):
-    temp_json_data = get_temp_json_data()
-    if not temp_json_data:
-        with open('providers.json', 'w', encoding='utf-8') as json_file:
-            json.dump(data, json_file, indent=4, ensure_ascii=False)
+    with open('providers.json', 'w', encoding='utf-8') as json_file:
+        json.dump(data, json_file, indent=4, ensure_ascii=False)
 
 # 首页路由
 @app.get("/")
@@ -70,6 +90,8 @@ async def update_providers(providers_data: str = Form(...)):
         new_providers_data = json.loads(providers_data)  # 解析提供者数据
         write_providers_json(new_providers_data)  # 写入提供者数据
         return JSONResponse(content={"message": "Providers.json 更新成功"}, status_code=200)
+    except json.JSONDecodeError:
+        return JSONResponse(content={"message": "无效的 JSON 数据"}, status_code=400)
     except Exception as e:
         return JSONResponse(content={"message": f"更新 Providers.json 时出错: {str(e)}"}, status_code=500)
 
@@ -77,12 +99,11 @@ async def update_providers(providers_data: str = Form(...)):
 @app.post("/edit_temp_json")
 async def edit_temp_json(temp_json_data: str = Form(...)):
     try:
-        if temp_json_data:
-            new_temp_json_data = json.loads(temp_json_data)  # 解析新的临时 JSON 数据
-            os.environ['TEMP_JSON_DATA'] = json.dumps(new_temp_json_data, indent=4, ensure_ascii=False)  # 更新环境变量
-            return JSONResponse(content={"status": "success"}, status_code=200)
-        else:
-            return JSONResponse(content={"status": "error", "message": "TEMP_JSON_DATA 不能为空"}, status_code=400)
+        new_temp_json_data = json.loads(temp_json_data)  # 解析临时 JSON 数据
+        os.environ['TEMP_JSON_DATA'] = json.dumps(new_temp_json_data, indent=4, ensure_ascii=False)
+        return JSONResponse(content={"status": "success"}, status_code=200)
+    except json.JSONDecodeError:
+        return JSONResponse(content={"status": "error", "message": "无效的 JSON 数据"}, status_code=400)
     except Exception as e:
         return JSONResponse(content={"status": "error", "message": str(e)}, status_code=500)
 
@@ -97,8 +118,8 @@ async def config(url: str, request: Request):
     if substrings and any(substring in url for substring in substrings.split(',')):
         return JSONResponse(content={'status': 'error', 'message_CN': '填写参数不符合规范'}, status_code=403)  # 参数不符合规范
 
-    # 初始化临时 JSON 数据
-    temp_json_data = json.loads('{"subscribes":[{"url":"URL","tag":"tag_1","enabled":true,"emoji":1,"subgroup":"","prefix":"","ex-node-name": "","User-Agent":"clashmeta"},{"url":"URL","tag":"tag_2","enabled":false,"emoji":1,"subgroup":"","prefix":"","ex-node-name": "","User-Agent":"clashmeta"},{"url":"URL","tag":"tag_3","enabled":false,"emoji":1,"subgroup":"","prefix":"","ex-node-name": "","User-Agent":"clashmeta"}],"auto_set_outbounds_dns":{"proxy":"","direct":""},"save_config_path":"./config.json","auto_backup":false,"exclude_protocol":"ssr","config_template":"","Only-nodes":false}')
+    # 使用默认的订阅数据
+    temp_json_data = get_temp_json_data()
     subscribe = temp_json_data['subscribes'][0]
     subscribe2 = temp_json_data['subscribes'][1]
     subscribe3 = temp_json_data['subscribes'][2]
@@ -106,58 +127,29 @@ async def config(url: str, request: Request):
     
     encoded_url = unquote(url)  # 解码 URL
 
-    # 处理查询参数
-    if not query_string:
-        if any(substring in encoded_url for substring in ['&emoji=', '&file=', '&eps=', '&enn=']):
-            if '|' in encoded_url:
-                param = encoded_url.rsplit('&', 1)[-1]
-            else:
-                param = encoded_url.split('&', 1)[-1]
-            request.query_params = dict(item.split('=') for item in param.split('&'))
-            if request.query_params.get('prefix'):
-                request.query_params['prefix'] = unquote(request.query_params['prefix'])
-            if request.query_params.get('eps'):
-                request.query_params['eps'] = unquote(request.query_params['eps'])
-            if request.query_params.get('enn'):
-                request.query_params['enn'] = unquote(request.query_params['enn'])
-            if request.query_params.get('file'):
-                index = request.query_params.get('file').find(":")
-                next_index = index + 2
-                if index != -1:
-                    if next_index < len(request.query_params['file']) and request.query_params['file'][next_index] != "/":
-                        request.query_params['file'] = request.query_params['file'][:next_index-1] + "/" + request.query_params['file'][next_index-1:]
-    else:
-        if any(substring in query_string for substring in ['&emoji=', '&file=', '&eps=', '&enn=']):
-            if request.query_params.get('prefix'):
-                request.query_params['prefix'] = unquote(request.query_params['prefix'])
-            if request.query_params.get('eps'):
-                request.query_params['eps'] = unquote(request.query_params['eps'])
-            if request.query_params.get('enn'):
-                request.query_params['enn'] = unquote(request.query_params['enn'])
-            if request.query_params.get('file'):
-                index = request.query_params.get('file').find(":")
-                next_index = index + 2
-                if index != -1:
-                    if next_index < len(request.query_params['file']) and request.query_params['file'][next_index] != "/":
-                        request.query_params['file'] = request.query_params['file'][:next_index-1] + "/" + request.query_params['file'][next_index-1:]
-            elif 'file=' in query_string:
-                request.query_params['file'] = query_string.split('file=')[-1].split('&', 1)[0]
+    # 处理查询参数 (简化逻辑)
+    for key in ['prefix', 'eps', 'enn']:
+        if request.query_params.get(key):
+            request.query_params[key] = unquote(request.query_params[key])
 
-    # 处理 URL 中的冒号
+    # 处理 file 参数 (简化逻辑)
+    if request.query_params.get('file'):
+        file_param = request.query_params['file']
+        index = file_param.find(":")
+        if index != -1:
+            next_index = index + 2
+            if next_index < len(file_param) and file_param[next_index] != "/":
+                request.query_params['file'] = file_param[:next_index-1] + "/" + file_param[next_index-1:]
+
+    # 处理 URL 中的冒号 (简化逻辑)
     index_of_colon = encoded_url.find(":")
     if index_of_colon != -1:
         next_char_index = index_of_colon + 2
         if next_char_index < len(encoded_url) and encoded_url[next_char_index] != "/":
             encoded_url = encoded_url[:next_char_index-1] + "/" + encoded_url[next_char_index-1:]
 
-    # 构建完整的 URL
-    if query_string:
-        full_url = f"{encoded_url}?{'&'.join([f'{k}={v}' for k, v in query_string.items()])}"
-    else:
-        if any(substring in encoded_url for substring in ['&emoji=', '&file=']):
-            full_url = f"{encoded_url.split('&')[0]}"
-        else:
-            full_url = f"{encoded_url}"
+    # 构建完整的 URL (简化逻辑)
+    full_url = f"{encoded_url}?{'&'.join([f'{k}={v}' for k, v in query_string.items()])}" if query_string else encoded_url
 
     # 获取查询参数
     emoji_param = request.query_params.get('emoji', '')
@@ -169,7 +161,7 @@ async def config(url: str, request: Request):
     eps_param = request.query_params.get('eps', '')
     enn_param = request.query_params.get('enn', '')
 
-    # 移除不必要的参数
+    # 移除不必要的参数 (简化逻辑)
     params_to_remove = [
         f'&prefix={quote(pre_param)}',
         f'&ua={ua_param}',
@@ -184,34 +176,28 @@ async def config(url: str, request: Request):
 
     full_url = full_url.replace(',', '%2C')  # 替换逗号
     for param in params_to_remove:
-        if param in full_url:
-            full_url = full_url.replace(param, '')
-    if request.query_params.get('url'):
-        full_url = full_url
-    else:
-        full_url = unquote(full_url)
+        full_url = full_url.replace(param, '')
+
+    full_url = unquote(full_url) 
     if '/api/v4/projects/' in full_url:
         parts = full_url.split('/api/v4/projects/')
         full_url = parts[0] + '/api/v4/projects/' + parts[1].replace('/', '%2F', 1)
 
-    # 处理订阅链接
+    # 处理订阅链接 (简化逻辑)
     url_parts = full_url.split('|')
     if len(url_parts) > 1:
-        subscribe['url'] = full_url.split('url=', 1)[-1].split('|')[0] if full_url.startswith('url') else full_url.split('|')[0]
+        subscribe['url'] = url_parts[0]
         subscribe['ex-node-name'] = enn_param
-        subscribe2['url'] = full_url.split('url=', 1)[-1].split('|')[1] if full_url.startswith('url') else full_url.split('|')[1]
+        subscribe2['url'] = url_parts[1]
         subscribe2['emoji'] = 1
         subscribe2['enabled'] = True
-        subscribe2['subgroup'] = ''
-        subscribe2['prefix'] = ''
         subscribe2['ex-node-name'] = enn_param
-        subscribe2['User-Agent'] = 'clashmeta'
         if len(url_parts) == 3:
-            subscribe3['url'] = full_url.split('url=', 1)[-1].split('|')[2] if full_url.startswith('url') else full_url.split('|')[2]
+            subscribe3['url'] = url_parts[2]
             subscribe3['enabled'] = True
             subscribe3['ex-node-name'] = enn_param
     if len(url_parts) == 1:
-        subscribe['url'] = full_url.split('url=', 1)[-1] if full_url.startswith('url') else full_url
+        subscribe['url'] = full_url
         subscribe['emoji'] = int(emoji_param) if emoji_param.isdigit() else subscribe.get('emoji', '')
         subscribe['tag'] = tag_param if tag_param else subscribe.get('tag', '')
         subscribe['prefix'] = pre_param if pre_param else subscribe.get('prefix', '')
@@ -282,7 +268,7 @@ async def generate_config(template_index: str = Form(...)):
 @app.post("/clear_temp_json_data")
 async def clear_temp_json_data():
     try:
-        os.environ['TEMP_JSON_DATA'] = json.dumps({}, indent=4, ensure_ascii=False)  # 清空 TEMP_JSON_DATA
+        os.environ['TEMP_JSON_DATA'] = json.dumps(DEFAULT_TEMP_JSON_DATA, indent=4, ensure_ascii=False)  # 清除临时 JSON 数据
         return JSONResponse(content={"message": "TEMP_JSON_DATA 清除成功"}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"message": f"清除 TEMP_JSON_DATA 时出错: {str(e)}"}, status_code=500)
