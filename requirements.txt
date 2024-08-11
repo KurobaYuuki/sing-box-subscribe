@@ -4,4 +4,7 @@ scp
 chardet
 PyYAML
 ruamel.yaml
-Flask==2.3.2
+fastapi
+uvicorn
+python-multipart
+jinja2

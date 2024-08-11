@@ -4,7 +4,11 @@ verify_ssl = true
 name = "pypi"
  
 [packages]
-flask = "*"
- 
+fastapi = "*"
+uvicorn = "*"
+python-multipart = "*"
+jinja2 = "*"
+requests = "*"
+
 [requires]
 python_version = "3.12"
