@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Request, Form, HTTPException, BackgroundTasks
-from fastapi.responses import JSONResponse, FileResponse, Response
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import JSONResponse, Response
 from fastapi.templating import Jinja2Templates
 from urllib.parse import quote, unquote
 import json
@@ -7,9 +7,7 @@ import os
 import sys
 import subprocess
 import tempfile
-import shutil
 import requests
-from datetime import datetime, timedelta
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")  # 模板文件在 'templates' 文件夹中
@@ -116,7 +114,7 @@ async def config(url: str, request: Request):
         return JSONResponse(content={'status': 'error', 'message': 'block'}, status_code=403)  # 阻止请求
     substrings = os.getenv('STR')  # 获取 STR 环境变量
     if substrings and any(substring in url for substring in substrings.split(',')):
-        return JSONResponse(content={'status': 'error', 'message_CN': '填写参数不符合规范'}, status_code=403)  # 参数不符合规范
+        return JSONResponse(content={'status': 'error', 'message': '填写参数不符合规范'}, status_code=403)  # 参数不符合规范
 
     # 使用默认的订阅数据
     temp_json_data = get_temp_json_data()
@@ -214,7 +212,7 @@ async def config(url: str, request: Request):
         temp_json_data = json.dumps(json.dumps(temp_json_data, indent=4, ensure_ascii=False), indent=4, ensure_ascii=False)
 
         response = requests.get(full_url)  # 发送 GET 请求
-        subscription_userinfo = response.headers.get('subscription-userinfo', 'subscription-userinfo 未找到')
+        subscription_userinfo = response.headers.get('subscription-userinfo')
 
         # 调用外部脚本
         subprocess.check_call([sys.executable, 'main.py', '--template_index', selected_template_index, '--temp_json_data', temp_json_data])
@@ -230,13 +228,14 @@ async def config(url: str, request: Request):
             config_content = config_file.read()  # 读取配置文件内容
 
         response = Response(content=config_content, media_type='text/plain; charset=utf-8')
-        response.headers['subscription-userinfo'] = subscription_userinfo  # 添加用户信息到响应头
+        if subscription_userinfo is not None:
+            response.headers['subscription-userinfo'] = subscription_userinfo  # 添加用户信息到响应头
         return response
     except subprocess.CalledProcessError as e:
         os.environ['TEMP_JSON_DATA'] = json.dumps(json.loads(data_json['TEMP_JSON_DATA']), indent=4, ensure_ascii=False)
-        return JSONResponse(content={'status': 'error'}, status_code=500)
+        return JSONResponse(content={'status': 'error','message': f'执行脚本时出错: {str(e)}'}, status_code=500)
     except Exception as e:
-        return JSONResponse(content={'status': 'error', 'message_CN': '认真看刚刚的网页说明、github写的reademe文件;', 'message_VN': 'Quá thời gian phân tích đăng ký: Vui lòng kiểm tra xem liên kết đăng ký có chính xác không hoặc vui lòng chuyển sang "nogroupstemplate" và thử lại; Vui lòng không chỉnh sửa giá trị "tag", trừ khi bạn hiểu nó làm gì;', 'message_EN': 'Subscription parsing timeout: Please check if the subscription link is correct or please change to "no_groups_template" and try again; Please do not modify the "tag" value unless you understand what it does;'}, status_code=500)
+        return JSONResponse(content={'status': 'error', 'message': f'出现错误，请自行排查: {str(e)}'}, status_code=500)
 
 # 生成配置的路由
 @app.post("/generate_config")
@@ -260,9 +259,9 @@ async def generate_config(template_index: str = Form(...)):
         return Response(content=config_content, media_type='text/plain; charset=utf-8')
     except subprocess.CalledProcessError as e:
         os.environ['TEMP_JSON_DATA'] = json.dumps(json.loads(data_json['TEMP_JSON_DATA']), indent=4, ensure_ascii=False)
-        return JSONResponse(content={'status': 'error'}, status_code=500)
+        return JSONResponse(content={'status': 'error','message': f'执行脚本时出错: {str(e)}'}, status_code=500)
     except Exception as e:
-        return JSONResponse(content={'status': 'error', 'message_CN': '认真看刚刚的网页说明、github写的reademe文件;', 'message_VN': 'Quá thời gian phân tích đăng ký: Vui lòng kiểm tra xem liên kết đăng ký có chính xác không hoặc vui lòng chuyển sang "nogroupstemplate" và thử lại; Vui lòng không chỉnh sửa giá trị "tag", trừ khi bạn hiểu nó làm gì;', 'message_EN': 'Subscription parsing timeout: Please check if the subscription link is correct or please change to "no_groups_template" and try again; Please do not modify the "tag" value unless you understand what it does;'}, status_code=500)
+        return JSONResponse(content={'status': 'error', 'message': f'出现错误，请自行排查: {str(e)}'}, status_code=500)
 
 # 清除临时 JSON 数据的路由
 @app.post("/clear_temp_json_data")
