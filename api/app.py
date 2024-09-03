@@ -158,6 +158,7 @@ async def config(url: str, request: Request):
     pre_param = request.query_params.get('prefix', '')
     eps_param = request.query_params.get('eps', '')
     enn_param = request.query_params.get('enn', '')
+    only_param = request.query_params.get('only' ,'')
 
     # 移除不必要的参数 (简化逻辑)
     params_to_remove = [
@@ -169,7 +170,8 @@ async def config(url: str, request: Request):
         f'&emoji={emoji_param}',
         f'&tag={tag_param}',
         f'&eps={quote(eps_param)}',
-        f'&enn={quote(enn_param)}'
+        f'&enn={quote(enn_param)}',
+        f'&only={only_param}'
     ]
 
     full_url = full_url.replace(',', '%2C')  # 替换逗号
@@ -201,6 +203,7 @@ async def config(url: str, request: Request):
         subscribe['prefix'] = pre_param if pre_param else subscribe.get('prefix', '')
         subscribe['ex-node-name'] = enn_param
         subscribe['User-Agent'] = ua_param if ua_param else 'clashmeta'
+    temp_json_data['Only-nodes'] = only_param if only_param else temp_json_data.get('Only-nodes', '')
     temp_json_data['exclude_protocol'] = eps_param if eps_param else temp_json_data.get('exclude_protocol', '')
     temp_json_data['config_template'] = unquote(file_param) if file_param else temp_json_data.get('config_template', '')
 
