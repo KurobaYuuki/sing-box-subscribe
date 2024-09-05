@@ -230,7 +230,7 @@ async def config(url: str, request: Request):
         with open(config_file_path, 'r', encoding='utf-8') as config_file:
             config_content = config_file.read()  # 读取配置文件内容
 
-        response = Response(content=config_content, media_type='text/plain; charset=utf-8')
+        response = Response(content=config_content, media_type='text/json; charset=utf-8')
         if subscription_userinfo is not None:
             response.headers['subscription-userinfo'] = subscription_userinfo  # 添加用户信息到响应头
         return response
@@ -259,7 +259,7 @@ async def generate_config(template_index: str = Form(...)):
         with open(config_file_path, 'r', encoding='utf-8') as config_file:
             config_content = config_file.read()  # 读取配置文件内容
 
-        return Response(content=config_content, media_type='text/plain; charset=utf-8')
+        return Response(content=config_content, media_type='text/json; charset=utf-8')
     except subprocess.CalledProcessError as e:
         os.environ['TEMP_JSON_DATA'] = json.dumps(json.loads(data_json['TEMP_JSON_DATA']), indent=4, ensure_ascii=False)
         return JSONResponse(content={'status': 'error','message': f'执行脚本时出错: {str(e)}'}, status_code=500)

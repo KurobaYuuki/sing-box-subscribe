@@ -595,7 +595,7 @@ if __name__ == '__main__':
             for content in contents:
                 # 将内容添加到新列表中
                 combined_contents.append(content)
-        final_config = combined_contents  # 只返回节点信息
+        final_config = {"outbounds": combined_contents}  # 只返回节点信息
     else:
         final_config = combin_to_config(config, nodes)  # 节点信息添加到模板
     save_config(providers["save_config_path"], final_config)
