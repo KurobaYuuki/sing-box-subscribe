@@ -203,7 +203,7 @@ async def config(url: str, request: Request):
         subscribe['prefix'] = pre_param if pre_param else subscribe.get('prefix', '')
         subscribe['ex-node-name'] = enn_param
         subscribe['User-Agent'] = ua_param if ua_param else 'clashmeta'
-    temp_json_data['Only-nodes'] = only_param if only_param else temp_json_data.get('Only-nodes', '')
+    temp_json_data['Only-nodes'] = only_param if only_param == 'True' else temp_json_data.get('Only-nodes', '')
     temp_json_data['exclude_protocol'] = eps_param if eps_param else temp_json_data.get('exclude_protocol', '')
     temp_json_data['config_template'] = unquote(file_param) if file_param else temp_json_data.get('config_template', '')
 
