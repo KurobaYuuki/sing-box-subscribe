@@ -45,7 +45,7 @@
     ],
     "rules": [
       {
-        "rule_set": "adrules",
+        "rule_set": "AWAvenue-Ads-Rule",
         "server": "block"
       },
       {
@@ -363,7 +363,7 @@
         "outbound": "dns-out"
       },
       {
-        "rule_set": "adrules",
+        "rule_set": "AWAvenue-Ads-Rule",
         "outbound": "block"
       },
       {
@@ -450,10 +450,10 @@
     ],
     "rule_set": [
       {
-        "tag": "adrules",
+        "tag": "AWAvenue-Ads-Rule",
         "type": "remote",
         "format": "binary",
-        "url": "https://adrules.top/adrules-singbox.srs",
+        "url": "https://mirror.ghproxy.com/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Singbox-regex.srs",
         "download_detour": "direct"
       },
       {
