@@ -4,7 +4,7 @@
 python main.py
 ```
 
-或者你可以直接带template_index参数选定模板，0表示第一个模板(no flask不支持此参数)
+或者你可以直接带 template_index 参数选定模板，0 表示第一个模板(no flask 不支持此参数)
 
 ```
 python main.py --template_index=0
