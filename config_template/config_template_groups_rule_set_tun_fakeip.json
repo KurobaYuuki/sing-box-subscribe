@@ -42,7 +42,7 @@
     "rules": [
       {
         "rule_set": "AWAvenue-Ads-Rule",
-        "server": "block"
+        "action": "reject"
       },
       {
         "outbound": "any",
