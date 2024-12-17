@@ -37,10 +37,6 @@
       {
         "tag": "fakeip",
         "address": "fakeip"
-      },
-      {
-        "tag": "block",
-        "address": "rcode://success"
       }
     ],
     "rules": [
@@ -53,16 +49,17 @@
         "server": "local"
       },
       {
-        "query_type": ["A", "AAAA"],
-        "server": "fakeip"
-      },
-      {
         "clash_mode": "direct",
         "server": "local"
       },
       {
         "clash_mode": "global",
         "server": "google"
+      },
+      {
+        "query_type": ["A", "AAAA"],
+        "rule_set": "geosite-cn",
+        "server": "fakeip"
       },
       {
         "rule_set": "geosite-cn",
@@ -82,6 +79,10 @@
         ],
         "server": "google",
         "client_subnet": "114.114.114.114/24"
+      },
+      {
+        "query_type": ["A", "AAAA"],
+        "server": "fakeip"
       }
     ],
     "independent_cache": true,
@@ -89,14 +90,13 @@
   },
   "inbounds": [
     {
-      "tag": "tun",
+      "tag": "tun-in",
       "type": "tun",
       "address": ["172.19.0.1/30", "fdfe:dcba:9876::1/126"],
       "route_exclude_address": ["192.168.0.0/16"],
       "stack": "system",
       "auto_route": true,
       "strict_route": true,
-      "sniff": true,
       "platform": {
         "http_proxy": {
           "enabled": true,
@@ -106,11 +106,10 @@
       }
     },
     {
-      "tag": "mixed",
+      "tag": "mixed-in",
       "type": "mixed",
       "listen": "127.0.0.1",
-      "listen_port": 7890,
-      "sniff": true
+      "listen_port": 7890
     }
   ],
   "outbounds": [
@@ -335,20 +334,16 @@
     {
       "tag": "direct",
       "type": "direct"
-    },
-    {
-      "tag": "dns-out",
-      "type": "dns"
-    },
-    {
-      "tag": "block",
-      "type": "block"
     }
   ],
   "route": {
     "auto_detect_interface": true,
     "final": "Proxy",
     "rules": [
+      {
+        "inbound": ["tun-in", "mixed-in"],
+        "action": "sniff"
+      },
       {
         "type": "logical",
         "mode": "or",
@@ -360,11 +355,11 @@
             "protocol": "dns"
           }
         ],
-        "outbound": "dns-out"
+        "action": "hijack-dns"
       },
       {
         "rule_set": "AWAvenue-Ads-Rule",
-        "outbound": "block"
+        "action": "reject"
       },
       {
         "clash_mode": "direct",
